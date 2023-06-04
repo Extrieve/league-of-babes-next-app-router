@@ -2,6 +2,8 @@
   "extends": "next/core-web-vitals",
   "rules": {
     "indent": ["error", 2],
-    "semi": ["error", "always"]
+    "semi": ["error", "always"],
+    // only one function argument per line
+    "function-paren-newline": ["error", "never"]
   }
 }
