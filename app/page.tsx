@@ -1,7 +1,24 @@
-export default function Home() {
+export const Home = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1 className="text-6xl font-bold">Welcome to the League of Babes</h1>
-    </main>
+    <div className="home">
+      <h1>
+        League of Babes
+      </h1>
+      <p className="home-description">
+        Find out whos your favorite Babe across Summoners Rift 😳
+      </p>
+      <div className='go'>
+        <a href="/match">
+          <button className="home-button">
+            Find your Babe
+          </button>
+        </a>
+        <a href="/champions">
+          <button className="home-button">
+            Explore Babes
+          </button>
+        </a>
+      </div>
+    </div>
   );
 }
