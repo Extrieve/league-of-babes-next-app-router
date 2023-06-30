@@ -9,7 +9,7 @@ interface ChampionCardProps {
   size?: 'small' | 'medium' | 'large';
 }
 
-const ChampionCard: FC<ChampionCardProps> = ({ champion }) => {
+const ChampionCard: FC<ChampionCardProps> = ({ champion, size }: ChampionCardProps) => {
   return (
     <div className="champion-card">
       <Image src={champion.imageUrl} alt={champion.name} />
