@@ -1,3 +1,5 @@
+'use client';
+
 import Champion from '@/models/iChampion';
 import Image from 'next/image';
 import React from 'react';
