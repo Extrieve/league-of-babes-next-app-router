@@ -1,19 +1,25 @@
-'use client';
+import Champion from '@/models/iChampion';
+import Image from 'next/image';
+import React from 'react';
 
-import Champion from "@/models/iChampion";
-import Image from "next/image";
-import { FC } from "react";
-
-interface ChampionCardProps {
-  champion: Champion;
-  size?: 'small' | 'medium' | 'large';
-}
-
-const ChampionCard: FC<ChampionCardProps> = ({ champion, size }: ChampionCardProps) => {
+const ChampionCard: React.FC<{ champion: Champion }> = ({ champion }) => {
   return (
-    <div className="champion-card">
-      <Image src={champion.imageUrl} alt={champion.name} />
-      <h3>{champion.name}</h3>
+    <div className="max-w-sm rounded overflow-hidden shadow-lg m-2 flex flex-col">
+      <Image className="w-full" src={champion.imageUrl} alt={champion.name} />
+      <div className="px-6 py-4">
+        <div className="font-bold text-xl mb-2">{champion.name}</div>
+        <p className="text-gray-700 text-base">
+          {champion.title}
+        </p>
+        <p className="text-gray-700 text-sm">
+          {champion.blurb}
+        </p>
+      </div>
+      <div className="px-6 pt-4 pb-2">
+        {champion.tags.map((tag, index) => (
+          <span key={index} className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#{tag}</span>
+        ))}
+      </div>
     </div>
   );
 };
