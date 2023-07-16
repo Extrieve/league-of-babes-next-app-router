@@ -1,4 +1,5 @@
 import Champion from '@/models/iChampion';
+import Leaderboard from '@/models/iLeaderboard';
 import axios from 'axios';
 
 const external_api_base_url = 'https://ddragon.leagueoflegends.com/cdn/';
@@ -36,6 +37,15 @@ export const getChampion = async (version: string, id: string): Promise<Champion
   const response = await axios.get(request_url).then((res) => {
     // if response is successful, return the data as iChampion[], else return an empty array
     return res.status === 200 ? res.data.data : [];
+  });
+
+  return response;
+};
+
+export const getAllLeaderboards = async (): Promise<Leaderboard[]> => {
+  const response = await axios.get("http://localhost:5000/api/leaderboards").then((res) => {
+    // if response is successful, return the data as iLeaderboard[], else return an empty array
+    return res.status === 200 ? res.data : [];
   });
 
   return response;
