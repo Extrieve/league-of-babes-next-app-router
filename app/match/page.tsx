@@ -21,6 +21,7 @@ export default function MatchPage() {
     fetchChampions();
   }, []);
 
+  // Todo: Fix the voting logic
   const handleVote = (votedChampion: Champion, unvotedChampion: Champion) => {
     setVotes((prevVotes) => ({
       ...prevVotes,
