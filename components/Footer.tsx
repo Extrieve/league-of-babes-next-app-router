@@ -1,6 +1,6 @@
 'use client';
 
-import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaInstagram, FaTwitter } from 'react-icons/fa';
 
 export default function Footer() {
   return (
@@ -9,9 +9,6 @@ export default function Footer() {
         &copy; {new Date().getFullYear()} League of Babes. All rights reserved.
       </div>
       <div className="space-x-4">
-        <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" className="text-white hover:text-blue-300 transition-colors duration-200">
-          <FaFacebookF />
-        </a>
         <a href="https://www.instagram.com/" target="_blank" rel="noreferrer" className="text-white hover:text-blue-300 transition-colors duration-200">
           <FaInstagram />
         </a>
