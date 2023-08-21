@@ -46,7 +46,7 @@ export default function MatchPage() {
         champion ? (
           <div key={champion.id}>
             <Image src={champion.imageUrl} alt={champion.name} width={72}  height={360}/>
-            <p>{champion.name}</p>
+            <h3>{champion.name}</h3>
             {votes[champion.id] && <p>Votes: {votes[champion.id]}</p>}
             <button onClick={() => handleVote(champion, match[1 - index] as Champion)}>Vote</button>
           </div>
