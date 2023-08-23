@@ -1,54 +1,81 @@
-'use client';
-
 import { getAllChampions, getVersions } from "@/api/Service";
 import Champion from "@/models/iChampion";
 import Image from "next/image";
-import { redirect } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useEffect, useReducer } from 'react';
+
+interface State {
+  champions: Champion[];
+  match: [Champion | null, Champion | null];
+  votes: { [key: string]: number };
+}
+
+const initialState: State = {
+  champions: [],
+  match: [null, null],
+  votes: {},
+};
+
+const reducer = (state: State, action: any): State => {
+  switch (action.type) {
+  case 'setChampions':
+    return { ...state, champions: action.payload };
+  case 'setMatch':
+    return { ...state, match: action.payload };
+  case 'setVotes':
+    return { ...state, votes: action.payload };
+  default:
+    return state;
+  }
+};
 
 export default function MatchPage() {
-  const [champions, setChampions] = useState<Champion[]>([]);
-  const [match, setMatch] = useState<[Champion | null, Champion | null]>([null, null]);
-  const [votes, setVotes] = useState<{ [key: string]: number }>({});
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchChampions = async () => {
       const version = await getVersions();
       const data = await getAllChampions(version);
-      setChampions(data);
-      setMatch([data[0], data[1]]);
+      dispatch({ type: 'setChampions', payload: data });
+      dispatch({ type: 'setMatch', payload: [data[0], data[1]] });
     };
     fetchChampions();
   }, []);
 
-  // Todo: Fix the voting logic
   const handleVote = (votedChampion: Champion, unvotedChampion: Champion) => {
-    setVotes((prevVotes) => ({
-      ...prevVotes,
-      [votedChampion.id]: (prevVotes[votedChampion.id] || 0) + 1,
-    }));
+    dispatch({
+      type: 'setVotes',
+      payload: {
+        ...state.votes,
+        [votedChampion.id]: (state.votes[votedChampion.id] || 0) + 1,
+      },
+    });
 
-    const remainingChampions = champions.filter((c) => c.id !== unvotedChampion.id);
-    if (remainingChampions.length === 0 || votes[votedChampion.id] === 4) {
-      redirect(`/champions/${votedChampion.id}`);
+    const remainingChampions = state.champions.filter(c => c.id !== unvotedChampion.id);
+    if (remainingChampions.length === 0 || state.votes[votedChampion.id] === 4) {
+      router.push(`/champions/${votedChampion.id}`);
     } else {
-      setMatch([
-        votedChampion,
-        remainingChampions[Math.floor(Math.random() * remainingChampions.length)],
-      ]);
-      setChampions(remainingChampions);
+      dispatch({
+        type: 'setMatch',
+        payload: [
+          votedChampion,
+          remainingChampions[Math.floor(Math.random() * remainingChampions.length)],
+        ],
+      });
+      dispatch({ type: 'setChampions', payload: remainingChampions });
     }
   };
 
   return (
     <div className="flex justify-around items-center">
-      {match.map((champion, index) =>
+      {state.match.map((champion, index) =>
         champion ? (
           <div key={champion.id}>
-            <Image src={champion.imageUrl} alt={champion.name} width={72}  height={360}/>
+            <Image src={champion.imageUrl} alt={champion.name} width={72} height={360} />
             <h3>{champion.name}</h3>
-            {votes[champion.id] && <p>Votes: {votes[champion.id]}</p>}
-            <button onClick={() => handleVote(champion, match[1 - index] as Champion)}>Vote</button>
+            {state.votes[champion.id] && <p>Votes: {state.votes[champion.id]}</p>}
+            <button onClick={() => handleVote(champion, state.match[1 - index] as Champion)}>Vote</button>
           </div>
         ) : null)}
     </div>
