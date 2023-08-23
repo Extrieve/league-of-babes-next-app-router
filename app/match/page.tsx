@@ -1,7 +1,9 @@
+'use client';
+
 import { getAllChampions, getVersions } from "@/api/Service";
 import Champion from "@/models/iChampion";
 import Image from "next/image";
-import { useRouter } from 'next/router';
+import { redirect } from 'next/navigation';
 import { useEffect, useReducer } from 'react';
 
 interface State {
@@ -31,7 +33,6 @@ const reducer = (state: State, action: any): State => {
 
 export default function MatchPage() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchChampions = async () => {
@@ -54,7 +55,7 @@ export default function MatchPage() {
 
     const remainingChampions = state.champions.filter(c => c.id !== unvotedChampion.id);
     if (remainingChampions.length === 0 || state.votes[votedChampion.id] === 4) {
-      router.push(`/champions/${votedChampion.id}`);
+      redirect(`/champions/${votedChampion.id}`);
     } else {
       dispatch({
         type: 'setMatch',
