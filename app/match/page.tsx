@@ -70,7 +70,7 @@ export default function MatchPage() {
 
   return (
     <div className="flex justify-around items-center">
-      {state.match.map((champion, index) =>
+      {state.match.map((champion: Champion | null, index: number) =>
         champion ? (
           <div key={champion.id}>
             <Image src={champion.imageUrl} alt={champion.name} width={72} height={360} />
