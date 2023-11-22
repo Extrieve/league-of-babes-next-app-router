@@ -3,22 +3,22 @@
 import { getAllChampions, getVersions } from "@/api/Service";
 import ChampionCard from "@/components/ChampionCard";
 import Champion from "@/models/iChampion";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 
 const ChampionsPage = (props: any) => {
-  const [champions, setChampions] = useState<Champion[]>([] as Champion[]);
+  const [champions, setChampions] = useState<Champion[]>([]);
+
+  const fetchData = useCallback(async () => {
+    const version = await getVersions();
+    const champions: Champion[] = await getAllChampions(version);
+    
+    setChampions(champions);
+  }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const version = await getVersions();
-      const champions: Champion[] = await getAllChampions(version);
-      
-      setChampions(champions);
-    };
-    
     fetchData();
-  }, []); // Empty dependency array means this effect runs once on component mount
+  }, [fetchData]);
   
   return (
     <div className="flex flex-wrap justify-around">
