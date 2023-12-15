@@ -3,7 +3,7 @@
 import { getAllChampions, getVersions } from "@/api/Service";
 import Champion from "@/models/iChampion";
 import Image from "next/image";
-import { redirect } from 'next/navigation';
+import router from "next/router";
 import { useEffect, useReducer } from 'react';
 
 interface State {
@@ -45,27 +45,31 @@ export default function MatchPage() {
   }, []);
 
   const handleVote = (votedChampion: Champion, unvotedChampion: Champion) => {
-    dispatch({
-      type: 'setVotes',
-      payload: {
-        ...state.votes,
-        [votedChampion.id]: (state.votes[votedChampion.id] || 0) + 1,
-      },
-    });
+    const updatedVotes = {
+      ...state.votes,
+      [votedChampion.id]: (state.votes[votedChampion.id] || 0) + 1,
+    };
+    dispatch({ type: 'setVotes', payload: updatedVotes });
+
+    if (updatedVotes[votedChampion.id] === 4) {
+      router.push(`/champions/${votedChampion.id}`); // Use router.push if using next/router
+      return;
+    }
 
     const remainingChampions = state.champions.filter(c => c.id !== unvotedChampion.id);
-    if (remainingChampions.length === 0 || state.votes[votedChampion.id] === 4) {
-      redirect(`/champions/${votedChampion.id}`);
-    } else {
-      dispatch({
-        type: 'setMatch',
-        payload: [
-          votedChampion,
-          remainingChampions[Math.floor(Math.random() * remainingChampions.length)],
-        ],
-      });
-      dispatch({ type: 'setChampions', payload: remainingChampions });
+    if (remainingChampions.length === 0) {
+      router.push(`/champions/${votedChampion.id}`); // Redirect if no more champions left
+      return;
     }
+
+    dispatch({
+      type: 'setMatch',
+      payload: [
+        votedChampion,
+        remainingChampions[Math.floor(Math.random() * remainingChampions.length)],
+      ],
+    });
+    dispatch({ type: 'setChampions', payload: remainingChampions });
   };
 
   return (
@@ -81,4 +85,4 @@ export default function MatchPage() {
         ) : null)}
     </div>
   );
-}
+};
