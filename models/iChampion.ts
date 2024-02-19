@@ -1,4 +1,4 @@
-interface Champion {
+export interface Champion {
   id: string;
   name: string;
   title: string;
@@ -6,5 +6,3 @@ interface Champion {
   imageUrl: string;
   tags: string[];
 }
-
-export default Champion;
