@@ -6,7 +6,7 @@ import Champion from "@/models/iChampion";
 import { useCallback, useEffect, useState } from "react";
 
 
-const ChampionsPage = (props: any) => {
+function ChampionsPage() {
   const [champions, setChampions] = useState<Champion[]>([]);
 
   const fetchData = useCallback(async () => {
@@ -23,7 +23,7 @@ const ChampionsPage = (props: any) => {
   return (
     <div className="flex flex-wrap justify-around">
       {champions && champions.map(champion => (
-        <ChampionCard key={champion.id} champion={champion} />
+        <ChampionCard key={champion.name} champion={champion} />
       ))}
     </div>
   );
